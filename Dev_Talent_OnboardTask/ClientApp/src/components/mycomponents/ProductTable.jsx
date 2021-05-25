@@ -1,5 +1,5 @@
 import React, { Component} from 'react'
-import {  Table, Button, Icon} from 'semantic-ui-react'
+import {  Table, Button, Icon,Menu,Dropdown,Pagination} from 'semantic-ui-react'
 import axios from 'axios';
 import EditProduct from './EditProduct';
 import DeleteProduct from './DeleteProduct';
@@ -15,6 +15,8 @@ export class ProductTable extends Component {
       currentPrice:"",
     toggleEditModal: false ,
     toggleDeleteModal:false,
+    currentpage: 1,
+    postsPerPage:3
     
       };
   }
@@ -47,7 +49,16 @@ export class ProductTable extends Component {
   
   
     render(){
-      const { products,toggleEditModal,currentPrice,currentName,id,toggleDeleteModal}=this.state;
+      const { products,toggleEditModal,currentPrice,currentName,id,toggleDeleteModal,postsPerPage}=this.state;
+      const indexOfLastPost = this.state.currentpage * this.state.postsPerPage;
+        const indexOfFirstPost = indexOfLastPost - postsPerPage;
+        const currentProducts = products.slice(indexOfFirstPost, indexOfLastPost);
+        const totalPages = Math.ceil(products.length / postsPerPage);
+        const options = [
+            { key: 1, text: '3', value: 3 },
+            { key: 2, text: '5', value: 5 },
+            { key: 3, text: '10', value: 10 },
+        ]  
      return (
 <div>
 <EditProduct open={ toggleEditModal}  toggle={this.toggle} currentName={currentName} currentPrice={currentPrice} id={id} refresh={this.getProduct()}/>
@@ -63,7 +74,7 @@ export class ProductTable extends Component {
     </Table.Header>
 
     <Table.Body>
-      {products.map((p)=>(
+      {currentProducts.map((p)=>(
                  <Table.Row key={p.id}>
        <Table.Cell>{p.name}</Table.Cell>
        <Table.Cell>${p.price}</Table.Cell>
@@ -85,6 +96,29 @@ export class ProductTable extends Component {
      </Table.Row>
         ))}
       </Table.Body>
+      
+      <Table.Footer>
+                        <Table.Row>
+                            <Table.HeaderCell colSpan="4">
+                                <Menu floated="left" compact>
+                                    <Dropdown onChange={(e, data) => this.setState({ postsPerPage: data.value})} placeholder='Rows/Page' options={options} simple item />
+                                </Menu>
+                                <Menu floated="right" pagination>
+                                    <Menu.Item as="a" icon>
+                                        <Icon name="chevron left" />
+                                    </Menu.Item>
+                                    <Pagination
+                                        defaultActivePage={1}
+                                        onPageChange={(event, data) => this.setState({ currentpage: data.activePage})}
+                                        totalPages={totalPages}
+                                    />
+                                    <Menu.Item as="a" icon>
+                                        <Icon name="chevron right" />
+                                    </Menu.Item>
+                                </Menu>
+                            </Table.HeaderCell>
+                        </Table.Row>
+                    </Table.Footer>
     </Table>
     
        </div>

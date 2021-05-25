@@ -1,8 +1,9 @@
 import React, { Component} from 'react'
-import {  Table, Button, Icon} from 'semantic-ui-react'
+import {  Table, Button, Icon,Menu,Dropdown,Pagination} from 'semantic-ui-react'
 import axios from 'axios';
 import EditSale from './EditSale';
 import DeleteSale from './DeleteSale'
+import CreateSale from './CreateSale'
 
 
 export class SalesTable extends Component {
@@ -20,24 +21,25 @@ export class SalesTable extends Component {
       CurrentDate:null,
     toggleEditModal: false ,
     toggleDeleteModal:false,
+    currentpage: 1,
+    postsPerPage:3,
+    toggleCreateModal: false ,
     
       };
   }
 
     componentDidMount(){
-     
           this.getSales();
           this.getData();
           this.getProduct();
           this.getStore();
           }
          
-      getSales()
-      { 
-        axios.get('/Sales/GetSale')
-        .then(({data}) => {
-            this.setState({sale:data,
-              
+          getSales()
+          {
+           axios.get(`/Sales/GetSales`)
+           .then(({data}) => {
+            this.setState({sales:data
             });
         console.log({data});
         
@@ -48,7 +50,7 @@ export class SalesTable extends Component {
       }
       getProduct()
       {
-       axios.get('/Products/GetProduct')
+       axios.get(`/Products/GetProduct`)
        .then(({data}) => {
         this.setState({products:data,
         });
@@ -61,7 +63,7 @@ export class SalesTable extends Component {
   }
   getStore()
           {
-           axios.get('/Stores/GetStore')
+           axios.get(`/Stores/GetStore`)
            .then(({data}) => {
             this.setState({stores:data,
             });
@@ -74,7 +76,7 @@ export class SalesTable extends Component {
       }
       getData()
       { 
-        axios.get('/Customers/GetCustomer')
+        axios.get(`/Customers/GetCustomer`)
         .then(({data}) => {
 
             this.setState({customers:data
@@ -93,15 +95,31 @@ export class SalesTable extends Component {
     toggle = () => {
       this.setState({toggleEditModal:!this.state.toggleEditModal})
   };
-  
+  toggleModal = () => {
+    this.setState({toggleCreateModal:!this.state.toggleCreateModal})
+};
   
     render(){
-      const { customers,products,stores,sales,toggleEditModal,id,toggleDeleteModal}=this.state;
-      
+      const { customers,products,stores,sales,toggleEditModal,id,toggleDeleteModal,postsPerPage,toggleCreateModal}=this.state;
+      const indexOfLastPost = this.state.currentpage * this.state.postsPerPage;
+        const indexOfFirstPost = indexOfLastPost - postsPerPage;
+        const currentsales = sales.slice(indexOfFirstPost, indexOfLastPost);
+        const totalPages = Math.ceil(customers.length / postsPerPage);
+        const options = [
+            { key: 1, text: '3', value: 3 },
+            { key: 2, text: '5', value: 5 },
+            { key: 3, text: '10', value: 10 },
+        ] 
      return (
+      
 <div>
+              <CreateSale open={toggleCreateModal} toggleModal={this.toggleModal} refreshSale={this.getSales()}
+              customers={customers} products={products} stores={stores}/>
+         
+          <Button primary onClick={()=>this.setState({toggleCreateModal: true })}>New Sale </Button>
 <EditSale  open={ toggleEditModal}  toggle={this.toggle}  customers={customers} toggleEditModal={toggleEditModal}
-products={products} stores={stores} refreshSale={this.getSales()}/>
+products={products} stores={stores} refreshSale={this.getSales()} currentProductId currentStoreId currentCustomerId 
+CurrentDate id />
 <DeleteSale open={toggleDeleteModal} toggleDelete={this.toggleDelete} id={id} refreshSale={this.getSales}/>
   <Table celled>
     <Table.Header>
@@ -116,13 +134,13 @@ products={products} stores={stores} refreshSale={this.getSales()}/>
     </Table.Header>
 
     <Table.Body>
-      {sales.map((s)=>(
+      {currentsales.map((s)=>(
        
                  <Table.Row key={s.id}>
                   
        <Table.Cell>{s.customer.name}</Table.Cell>
        <Table.Cell>{s.product.name}</Table.Cell>
-       <Table.Cell>{s.Store.name}</Table.Cell>
+       <Table.Cell>{s.store.name}</Table.Cell>
        <Table.Cell format="D MMM, YYYY">{s.datasold}</Table.Cell>
        <Table.Cell><Button color='yellow' icon labelPosition='left' onClick={()=>this.setState(
          {toggleEditModal: true,
@@ -144,8 +162,30 @@ products={products} stores={stores} refreshSale={this.getSales()}/>
      </Table.Row>
         ))}
       </Table.Body>
-    </Table>
     
+    <Table.Footer>
+                        <Table.Row>
+                            <Table.HeaderCell colSpan="4">
+                                <Menu  compact>
+                                    <Dropdown onChange={(e, data) => this.setState({ postsPerPage: data.value})} placeholder='Rows/Page' options={options} simple item />
+                                </Menu>
+                                <Menu floated="right" pagination>
+                                    <Menu.Item as="a" icon>
+                                        <Icon name="chevron left" />
+                                    </Menu.Item>
+                                    <Pagination
+                                        defaultActivePage={1}
+                                        onPageChange={(event, data) => this.setState({ currentpage: data.activePage})}
+                                        totalPages={totalPages}
+                                    />
+                                    <Menu.Item as="a" icon>
+                                        <Icon name="chevron right" />
+                                    </Menu.Item>
+                                </Menu>
+                            </Table.HeaderCell>
+                        </Table.Row>
+                    </Table.Footer>
+    </Table>
        </div>
     );
 }

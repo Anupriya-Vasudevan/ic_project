@@ -1,28 +1,36 @@
-import React, { useState, Fragment} from 'react';
+import React, { useState,   useEffect} from 'react';
 import { Button,  Form, Modal } from 'semantic-ui-react'
 import axios from 'axios';
 
 const EditSale= (props) =>{
-    const {open,toggle,refreshSale, sales, customers, products, stores} =props;
+    const {refreshSale, customers, products, stores,toggleEditModal,toggle,currentCustomerId,
+    currentProductId,currentStoreId,id,currentDate,open} =props;
     //const {name,address} =customer;
-    const [productId, setProductId] = useState(0);
-    const [customerId, setCustomerId] = useState(0);
-    const [storeId, setStoreId] = useState(0);
-    const [dateSold, setDateSold] = useState(0);
+    const [productId, setProductId] = useState(currentProductId);
+    const [customerId, setCustomerId] = useState(currentCustomerId);
+    const [storeId, setStoreId] = useState(currentStoreId);
+    const [dateSold, setDateSold] = useState(currentDate);
+    useEffect(() => {
+      setCustomerId(currentCustomerId);
+      setProductId( currentProductId);
+      setStoreId(currentStoreId);
+      setDateSold(currentDate);
+    }, [toggleEditModal]);
+  
   
     
   
     const  editSale=() => {
-      axios.put(`/Sales/PutSales/${sales.id}`,{
-        id: sales.id,
+      axios.put(`/Sales/PutSales/${id}`,{
+        id:id,
         productId: productId,
         customerId: customerId,
         storeId: storeId,
         dateSold: dateSold,
     })
         .then((res) => {
+          toggle();
             refreshSale();
-            toggle();
             
         })
         .catch((err) => {
@@ -31,14 +39,17 @@ const EditSale= (props) =>{
 };
         
       return (
-        <Fragment>
-        <Modal  open={open}>
-              <Modal.Header>Edit Sale</Modal.Header>
-              <Modal.Content >
-                
-                <Modal.Description>
-                <Form>
-                <Form.Field
+       
+       <Modal
+      size="mini"
+      dimmer="blurring"
+      
+      open={open}
+    >
+      <Modal.Header>Edit Sale</Modal.Header>
+      <Modal.Content>
+        <Form>
+          <Form.Field
             label="Date sold"
             control="input"
             type="date"
@@ -50,7 +61,7 @@ const EditSale= (props) =>{
           <Form.Field
             label="Customer"
             control="select"
-           
+            value={currentCustomerId}
             onChange={(e) => setCustomerId(e.target.value)}
             required
           >
@@ -66,7 +77,7 @@ const EditSale= (props) =>{
           <Form.Field
             label="Product"
             control="select"
-           
+            value={currentProductId}
             onChange={(e) => setProductId(e.target.value)}
             required
           >
@@ -78,11 +89,12 @@ const EditSale= (props) =>{
                 {p.name}
               </option>
             ))}
+          
           </Form.Field>
           <Form.Field
             label="Store"
             control="select"
-            
+            value={currentStoreId}
             onChange={(e) => setStoreId(e.target.value)}
             required
           >
@@ -95,19 +107,25 @@ const EditSale= (props) =>{
               </option>
             ))}
           </Form.Field>
-          </Form>
-          </Modal.Description>
-              </Modal.Content>
-              <Modal.Actions>
-              <Button color='black' onClick={toggle}>
-                Cancel
-                </Button>
-                <Button color='green' onClick={() =>editSale()}  >
-             Edit
-                </Button>
-              </Modal.Actions>
-            </Modal>
-            </Fragment>
-             );
-            };
+        </Form>
+      </Modal.Content>
+      <Modal.Actions>
+        <Button color="black" onClick={toggle}>
+          Cancel
+        </Button>
+        <Button
+          color="green"
+          content="Edit"
+          labelPosition="right"
+          icon="check"
+          onClick={() => {
+            editSale(id);
+          }}
+        />
+      </Modal.Actions>
+    </Modal>
+  );
+  
+  }
+            
             export default  EditSale

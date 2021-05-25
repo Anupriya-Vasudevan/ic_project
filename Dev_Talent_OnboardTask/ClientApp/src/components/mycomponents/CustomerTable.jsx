@@ -1,5 +1,5 @@
 import React, { Component} from 'react'
-import {  Table, Button, Icon,Pagination,Dropdown} from 'semantic-ui-react'
+import {  Table, Button, Icon,Pagination,Dropdown,Menu} from 'semantic-ui-react'
 
 import EditCustomer from './EditCustomer';
 import DeleteCustomer from './DeleteCustomer';
@@ -16,9 +16,8 @@ export class CustomerTable extends Component{
       currentAddress:"",
     toggleEditModal: false ,
     toggleDeleteModal:false,
-    pageItems: [],
-      page: 0,
-      pageSize: 5
+    currentpage: 1,
+    postsPerPage:3
         };
       
   }
@@ -53,8 +52,16 @@ export class CustomerTable extends Component{
           
     render()
     {
-      const { customers,toggleEditModal,currentAddress,currentName,id,toggleDeleteModal, page, pageItems,}=this.state;
-            
+      const { customers,toggleEditModal,currentAddress,currentName,id,toggleDeleteModal, postsPerPage}=this.state;
+      const indexOfLastPost = this.state.currentpage * this.state.postsPerPage;
+        const indexOfFirstPost = indexOfLastPost - postsPerPage;
+        const currentPosts = customers.slice(indexOfFirstPost, indexOfLastPost);
+        const totalPages = Math.ceil(customers.length / postsPerPage);
+        const options = [
+            { key: 1, text: '3', value: 3 },
+            { key: 2, text: '5', value: 5 },
+            { key: 3, text: '10', value: 10 },
+        ]      
      return (
 <div>
   
@@ -71,7 +78,7 @@ export class CustomerTable extends Component{
     </Table.Header>
 
     <Table.Body>
-      {customers.map((c)=>(
+      {currentPosts.map((c)=>(
                  <Table.Row key={c.id}>
        <Table.Cell>{c.name}</Table.Cell>
        <Table.Cell>{c.address}</Table.Cell>
@@ -93,20 +100,31 @@ export class CustomerTable extends Component{
      </Table.Row>
         ))}
       </Table.Body>
+      <Table.Footer>
+                        <Table.Row>
+                            <Table.HeaderCell colSpan="4">
+                                <Menu floated="left" compact>
+                                    <Dropdown onChange={(e, data) => this.setState({ postsPerPage: data.value})} placeholder='Rows/Page' options={options} simple item />
+                                </Menu>
+                                <Menu floated="right" pagination>
+                                    <Menu.Item as="a" icon>
+                                        <Icon name="chevron left" />
+                                    </Menu.Item>
+                                    <Pagination
+                                        defaultActivePage={1}
+                                        onPageChange={(event, data) => this.setState({ currentpage: data.activePage})}
+                                        totalPages={totalPages}
+                                    />
+                                    <Menu.Item as="a" icon>
+                                        <Icon name="chevron right" />
+                                    </Menu.Item>
+                                </Menu>
+                            </Table.HeaderCell>
+                        </Table.Row>
+                    </Table.Footer>
+
     </Table>
-    <Pagination defaultActivePage={5} totalPages={10} />
-    <Dropdown
-      selection
-      compact
-      options={[
-        { value: "10", text: "10" },
-        { value: "20", text: "20" },
-        { value: "30", text: "30" }
-      ]}
-      style={{ margin: "5px" }}
-      defaultValue="10"
-    />
-    <span>items per page</span>
+    
   </div>
 );
 }

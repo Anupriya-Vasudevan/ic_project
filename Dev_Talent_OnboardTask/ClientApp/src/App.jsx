@@ -5,7 +5,7 @@ import { Home } from './components/Home';
 import { Customer } from './components/mycomponents/Customer';
 import { Product } from './components/mycomponents/Product';
 import { Store } from './components/mycomponents/Store';
-import { Sales } from './components/mycomponents/Sales';
+import { SalesTable } from './components/mycomponents/SalesTable';
 import './custom.css'
 
 export default class App extends Component {
@@ -18,7 +18,7 @@ export default class App extends Component {
         <Route path='/customer' component={Customer} />
         <Route path='/Product' component={Product} />
         <Route path='/Store' component={Store} />
-        <Route path='/Sales' component={Sales} />
+        <Route path='/Sales' component={SalesTable} />
       </Layout>
     );
   }

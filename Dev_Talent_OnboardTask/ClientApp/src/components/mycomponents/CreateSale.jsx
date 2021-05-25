@@ -17,18 +17,14 @@ const  createSale=() => {
     dateSold: dateSold,
   })
 .then((res) => {
-    // this.getData();
      console.log(res);
      toggleModal();
      refreshSale();
-    
-    
-})
-
+    })
 .catch( (err) => {
 console.log(err);
 });
-}
+};
 return (
   <Modal  open={open}>
     <Modal.Header>Create Sale</Modal.Header>
