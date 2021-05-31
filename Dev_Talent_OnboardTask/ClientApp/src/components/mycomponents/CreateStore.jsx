@@ -49,7 +49,7 @@ return (
     <Button color='black' onClick={toggleModal}>
       Cancel
       </Button>
-      <Button color='green' onClick={createStore} refreshData>
+      <Button color='green' onClick={createStore} >
      Create
       </Button>
     </Modal.Actions>

@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Button,  Form, Modal } from 'semantic-ui-react'
 import axios from 'axios';
 
 const CreateCustomer = (props) =>{
-    const {open, toggleModal, refreshData } =props;
+    const {open, toggleModal, refreshCustomers } =props;
   const [name, setName] = useState();
   const [address, setAddress] = useState();
 const  createCustomer=() => {
-    axios.post('/Customers/PostCustomer', {
+    axios.post(`/Customers/PostCustomer`, {
         Name:name,
        Address:address,
       
@@ -16,7 +16,7 @@ const  createCustomer=() => {
       // this.getData();
        console.log(res);
        toggleModal();
-       refreshData();
+       refreshCustomers();
       
       
 })
@@ -25,10 +25,7 @@ const  createCustomer=() => {
 console.log(err);
 });
 }
-useEffect(() => {
-console.log(name)
-  
-});
+
   return (
     <Modal  open={open}>
       <Modal.Header>Create Customer</Modal.Header>
@@ -53,7 +50,7 @@ console.log(name)
       <Button color='black' onClick={toggleModal}>
         Cancel
         </Button>
-        <Button color='green' onClick={createCustomer} refreshData>
+        <Button color='green' onClick={createCustomer} >
        Create
         </Button>
       </Modal.Actions>

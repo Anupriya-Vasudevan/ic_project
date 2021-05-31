@@ -3,11 +3,11 @@ import { Button,  Form, Modal } from 'semantic-ui-react'
 import axios from 'axios';
   
 const CreateProduct = (props) =>{
-  const {open, toggleModal, refresh } =props;
+  const {open, toggleModal, refreshProducts } =props;
 const [name, setName] = useState();
 const [price, setPrice] = useState();
 const  createProduct=() => {
-  axios.post('/Products/PostProduct', {
+  axios.post(`/Products/PostProduct`, {
       Name:name,
      Price:price,
     
@@ -16,7 +16,7 @@ const  createProduct=() => {
     // this.getData();
      console.log(res);
      toggleModal();
-     refresh();
+     refreshProducts();
     
     
 })
@@ -49,7 +49,7 @@ return (
     <Button color='black' onClick={toggleModal}>
       Cancel
       </Button>
-      <Button color='green' onClick={createProduct} refresh>
+      <Button color='green' onClick={createProduct} >
      Create
       </Button>
     </Modal.Actions>

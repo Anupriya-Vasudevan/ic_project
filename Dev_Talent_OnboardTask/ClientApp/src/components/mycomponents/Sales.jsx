@@ -1,37 +1,86 @@
 import React, { Component} from 'react'
 import {  Table, Button, Icon,Menu,Dropdown,Pagination} from 'semantic-ui-react'
 import axios from 'axios';
-import EditStore from './EditStore';
-import DeleteStore from './DeleteStore';
-import CreateStore from './CreateStore';
+import EditSale from './EditSale';
+import DeleteSale from './DeleteSale'
+import CreateSale from './CreateSale'
 
 
-export class Store extends Component {
- 
+
+export class Sales extends Component {
+
   constructor(props) {
     super(props);
-    this.state = { stores:[],
+    this.state = { sales:[],
+      customers:[],
+      products:[],
+      stores:[],
       id:0,
-      currentName:"",
-      currentAddress:"",
-    toggleCreateModal: false ,
+      currentCustomerId:0,
+      currentProductId:0,
+      currentStoreId:0,
+      CurrentDate:null,
     toggleEditModal: false ,
     toggleDeleteModal:false,
     currentpage: 1,
-    postsPerPage:3
+    postsPerPage:3,
+    toggleCreateModal: false ,
+    
       };
   }
 
     componentDidMount(){
-     
+          this.getSales();
+          this.getData();
+          this.getProduct();
           this.getStore();
           }
          
-      getStore()
-      { 
-        axios.get('/Stores/GetStore')
-        .then(({data}) => {
+          getSales()
+          {
+           axios.get(`/Sales/GetSales`)
+           .then(({data}) => {
+            this.setState({sales:data
+            });
+        console.log({data});
+        
+      })
+      .catch( (err) => {
+       console.log(err);
+      });
+      }
+      getProduct()
+      {
+       axios.get(`/Products/GetProduct`)
+       .then(({data}) => {
+        this.setState({products:data,
+        });
+    console.log({data});
+    
+  })
+  .catch( (err) => {
+   console.log(err);
+  });
+  }
+  getStore()
+          {
+           axios.get(`/Stores/GetStore`)
+           .then(({data}) => {
             this.setState({stores:data,
+            });
+        console.log({data});
+        
+      })
+      .catch( (err) => {
+       console.log(err);
+      });
+      }
+      getData()
+      { 
+        axios.get(`/Customers/GetCustomer`)
+        .then(({data}) => {
+
+            this.setState({customers:data
               
             });
         console.log({data});
@@ -41,53 +90,65 @@ export class Store extends Component {
        console.log(err);
       });
       }
-      toggleModal = () => {
-        this.setState({toggleCreateModal:!this.state.toggleCreateModal})
-    };
      toggleDelete = () =>{
       this.setState({toggleDeleteModal:!this.state.toggleDeleteModal})
      };
     toggle = () => {
       this.setState({toggleEditModal:!this.state.toggleEditModal})
   };
-  
+  toggleModal = () => {
+    this.setState({toggleCreateModal:!this.state.toggleCreateModal})
+};
   
     render(){
-      const { stores,toggleEditModal,currentAddress,currentName,id,toggleDeleteModal,toggleCreateModal,postsPerPage}=this.state;
+      const { customers,products,stores,sales,toggleEditModal,id,toggleDeleteModal,postsPerPage,toggleCreateModal}=this.state;
       const indexOfLastPost = this.state.currentpage * this.state.postsPerPage;
         const indexOfFirstPost = indexOfLastPost - postsPerPage;
-        const currentstores = stores.slice(indexOfFirstPost, indexOfLastPost);
-        const totalPages = Math.ceil(stores.length / postsPerPage);
+        const currentsales = sales.slice(indexOfFirstPost, indexOfLastPost);
+        const totalPages = Math.ceil(customers.length / postsPerPage);
         const options = [
             { key: 1, text: '3', value: 3 },
             { key: 2, text: '5', value: 5 },
             { key: 3, text: '10', value: 10 },
-        ]      
+        ] 
      return (
+      
 <div>
-<CreateStore  open={toggleCreateModal} toggleModal={this.toggleModal} refreshStore={()=>this.getStore()}/>
-<EditStore  open={ toggleEditModal}  toggle={this.toggle} currentName={currentName} currentAddress={currentAddress} id={id} refreshStore={()=>this.getStore()}/>
-<DeleteStore open={toggleDeleteModal} toggleDelete={this.toggleDelete} id={id} refreshStore={()=>this.getStore()}/>
-<Button primary onClick={()=>this.setState({toggleCreateModal: true })}>New Store</Button>
+              <CreateSale open={toggleCreateModal} toggleModal={this.toggleModal} refreshSale={()=>this.getSales()}
+              customers={customers} products={products} stores={stores}/>
+         
+          <Button primary onClick={()=>this.setState({toggleCreateModal: true })}>New Sale </Button>
+<EditSale  open={ toggleEditModal}  toggle={this.toggle}  customers={customers} toggleEditModal={toggleEditModal}
+products={products} stores={stores} refreshSale={()=>this.getSales()} currentProductId currentStoreId currentCustomerId 
+CurrentDate id />
+<DeleteSale open={toggleDeleteModal} toggleDelete={this.toggleDelete} id={id} refreshSale={()=>this.getSales()}/>
   <Table celled>
     <Table.Header>
       <Table.Row>
-        <Table.HeaderCell>Name</Table.HeaderCell>
-        <Table.HeaderCell>Address</Table.HeaderCell>
+        <Table.HeaderCell>Customer</Table.HeaderCell>
+        <Table.HeaderCell>Product</Table.HeaderCell>
+        <Table.HeaderCell>Store</Table.HeaderCell>
+        <Table.HeaderCell>DateSold</Table.HeaderCell>
         <Table.HeaderCell>Actions</Table.HeaderCell>
         <Table.HeaderCell>Actions</Table.HeaderCell>
       </Table.Row>
     </Table.Header>
 
     <Table.Body>
-      {currentstores.map((s)=>(
+      {currentsales.map((s)=>(
+       
                  <Table.Row key={s.id}>
-       <Table.Cell>{s.name}</Table.Cell>
-       <Table.Cell>{s.address}</Table.Cell>
+                  
+       <Table.Cell>{s.customer.name}</Table.Cell>
+       <Table.Cell>{s.product.name}</Table.Cell>
+       <Table.Cell>{s.store.name}</Table.Cell>
+       <Table.Cell >{s.dateSold},</Table.Cell>
        <Table.Cell><Button color='yellow' icon labelPosition='left' onClick={()=>this.setState(
          {toggleEditModal: true,
-         currentName:s.name,
-         currentAddress:s.address,
+         currentCustomerId:s.customer.id,
+         currentProductId:s.product.id,
+         currentStoreId:s.store.id,
+         CurrentDate:s.date,
          id:s.id})}>
                     <Icon name='edit'/>
                   Edit</Button></Table.Cell>
@@ -102,7 +163,8 @@ export class Store extends Component {
      </Table.Row>
         ))}
       </Table.Body>
-      <Table.Footer>
+    
+    <Table.Footer>
                         <Table.Row>
                             <Table.HeaderCell colSpan="4">
                                 <Menu  compact>
@@ -124,11 +186,9 @@ export class Store extends Component {
                             </Table.HeaderCell>
                         </Table.Row>
                     </Table.Footer>
-
     </Table>
-    
        </div>
     );
 }
 }
-export default Store
+export default Sales

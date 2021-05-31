@@ -2,19 +2,20 @@ import React, { useState,   useEffect} from 'react';
 import { Button,  Form, Modal } from 'semantic-ui-react'
 import axios from 'axios';
 
+
 const EditSale= (props) =>{
     const {refreshSale, customers, products, stores,toggleEditModal,toggle,currentCustomerId,
     currentProductId,currentStoreId,id,currentDate,open} =props;
-    //const {name,address} =customer;
     const [productId, setProductId] = useState(currentProductId);
     const [customerId, setCustomerId] = useState(currentCustomerId);
     const [storeId, setStoreId] = useState(currentStoreId);
     const [dateSold, setDateSold] = useState(currentDate);
+    
     useEffect(() => {
       setCustomerId(currentCustomerId);
       setProductId( currentProductId);
       setStoreId(currentStoreId);
-      setDateSold(currentDate);
+      setDateSold(new Date(currentCustomerId).toISOString().substr(0,10));
     }, [toggleEditModal]);
   
   
@@ -49,7 +50,7 @@ const EditSale= (props) =>{
       <Modal.Header>Edit Sale</Modal.Header>
       <Modal.Content>
         <Form>
-          <Form.Field
+        <Form.Field
             label="Date sold"
             control="input"
             type="date"
@@ -89,12 +90,11 @@ const EditSale= (props) =>{
                 {p.name}
               </option>
             ))}
-          
           </Form.Field>
           <Form.Field
             label="Store"
             control="select"
-            value={currentStoreId}
+            value={currentProductId}
             onChange={(e) => setStoreId(e.target.value)}
             required
           >

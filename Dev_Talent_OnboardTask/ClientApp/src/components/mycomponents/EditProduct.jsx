@@ -3,10 +3,9 @@ import { Button,  Form, Modal } from 'semantic-ui-react'
 import axios from 'axios';
 
 const EditProduct = (props) =>{
-    const {open,toggle,refresh,id,currentName,currentPrice} =props;
-    //const {name,address} =customer;
+    const {open,toggle,refreshProducts,id,currentName,currentPrice} =props;
     const [cname, setName] = useState(currentName);
-  const [cprice, setPrice] = useState(currentPrice);
+    const [cprice, setPrice] = useState(currentPrice);
     const  editProduct=(id) => {
       axios.put(`/Products/PutProduct/${id}`,{
       
@@ -16,7 +15,7 @@ const EditProduct = (props) =>{
     })
         .then((res) => {
             toggle();
-            refresh();
+            refreshProducts();
             setName(currentName);
             setPrice(currentPrice);
         })

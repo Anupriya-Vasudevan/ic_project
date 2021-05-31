@@ -1,10 +1,9 @@
-/* eslint-disable no-undef */
 import React, { useState, Fragment} from 'react';
 import { Button,  Form, Modal } from 'semantic-ui-react'
 import axios from 'axios';
 
 const EditCustomer = (props) =>{
-    const {open,toggle,refresh,id,currentName,currentAddress} =props;
+    const {open,toggle,refreshCustomers,id,currentName,currentAddress} =props;
     //const {name,address} =customer;
     const [cname, setName] = useState(currentName);
   const [caddress, setAddress] = useState(currentAddress);
@@ -16,7 +15,7 @@ const EditCustomer = (props) =>{
         address: caddress,
     })
         .then((res) => {
-            refresh();
+            refreshCustomers();
             toggle();
             setName(currentName);
             setAddress(currentAddress);

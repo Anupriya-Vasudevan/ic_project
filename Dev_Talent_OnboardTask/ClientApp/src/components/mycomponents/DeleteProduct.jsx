@@ -3,15 +3,14 @@ import { Button,   Modal } from 'semantic-ui-react'
 import axios from 'axios';
 
 const DeleteProduct = (props) =>{
-    const {open,toggleDelete,refresh,id} =props;
+    const {open,toggleDelete,refreshProducts,id} =props;
    const deleteRecord = (id) => {
         axios.delete(`/Products/DeleteProduct/${id}`)
         .then((res) => {
             console.log(res);
             toggleDelete();
-           refresh();
-           
-            
+           refreshProducts();
+             
       })
       .catch( (err) => {
        console.log(err);
