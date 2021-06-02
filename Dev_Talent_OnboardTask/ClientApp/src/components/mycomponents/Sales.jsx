@@ -19,7 +19,7 @@ export class Sales extends Component {
       currentCustomerId:0,
       currentProductId:0,
       currentStoreId:0,
-      CurrentDate:null,
+      currentDate:null,
     toggleEditModal: false ,
     toggleDeleteModal:false,
     currentpage: 1,
@@ -101,7 +101,7 @@ export class Sales extends Component {
 };
   
     render(){
-      const { customers,products,stores,sales,toggleEditModal,id,toggleDeleteModal,postsPerPage,toggleCreateModal}=this.state;
+      const { currid,currentCustomerId,currentProductId,currentStoreId,currentDate, customers,products,stores,sales,toggleEditModal,id,toggleDeleteModal,postsPerPage,toggleCreateModal}=this.state;
       const indexOfLastPost = this.state.currentpage * this.state.postsPerPage;
         const indexOfFirstPost = indexOfLastPost - postsPerPage;
         const currentsales = sales.slice(indexOfFirstPost, indexOfLastPost);
@@ -114,13 +114,12 @@ export class Sales extends Component {
      return (
       
 <div>
-              <CreateSale open={toggleCreateModal} toggleModal={this.toggleModal} refreshSale={()=>this.getSales()}
-              customers={customers} products={products} stores={stores}/>
-         
+    <CreateSale open={toggleCreateModal} toggleModal={this.toggleModal} refreshSale={()=>this.getSales()}
+          customers={customers} products={products} stores={stores}/>
           <Button primary onClick={()=>this.setState({toggleCreateModal: true })}>New Sale </Button>
-<EditSale  open={ toggleEditModal}  toggle={this.toggle}  customers={customers} toggleEditModal={toggleEditModal}
-products={products} stores={stores} refreshSale={()=>this.getSales()} currentProductId currentStoreId currentCustomerId 
-CurrentDate id />
+<EditSale  open={ toggleEditModal}  toggle={this.toggle} currid={currid} currentCustomerId={currentCustomerId}  
+currentProductId={currentProductId} currentStoreId={currentStoreId} 
+currentDate={currentDate}  customers={customers} products={products} stores={stores} refreshSale={()=>this.getSales()} />
 <DeleteSale open={toggleDeleteModal} toggleDelete={this.toggleDelete} id={id} refreshSale={()=>this.getSales()}/>
   <Table celled>
     <Table.Header>
@@ -145,11 +144,12 @@ CurrentDate id />
        <Table.Cell >{s.dateSold},</Table.Cell>
        <Table.Cell><Button color='yellow' icon labelPosition='left' onClick={()=>this.setState(
          {toggleEditModal: true,
+          currid:s.id,
          currentCustomerId:s.customer.id,
          currentProductId:s.product.id,
          currentStoreId:s.store.id,
-         CurrentDate:s.date,
-         id:s.id})}>
+         currentDate:s.date,
+         })}>
                     <Icon name='edit'/>
                   Edit</Button></Table.Cell>
        

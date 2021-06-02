@@ -1,29 +1,23 @@
-import React, { useState,   useEffect} from 'react';
+import React, { useState} from 'react';
 import { Button,  Form, Modal } from 'semantic-ui-react'
 import axios from 'axios';
 
 
 const EditSale= (props) =>{
-    const {refreshSale, customers, products, stores,toggleEditModal,toggle,currentCustomerId,
-    currentProductId,currentStoreId,id,currentDate,open} =props;
+    const {open,toggle,currid,currentCustomerId,currentProductId,currentStoreId,currentDate,customers, products, stores,
+    refreshSale} =props;
     const [productId, setProductId] = useState(currentProductId);
     const [customerId, setCustomerId] = useState(currentCustomerId);
     const [storeId, setStoreId] = useState(currentStoreId);
     const [dateSold, setDateSold] = useState(currentDate);
     
-    useEffect(() => {
-      setCustomerId(currentCustomerId);
-      setProductId( currentProductId);
-      setStoreId(currentStoreId);
-      setDateSold(new Date(currentCustomerId).toISOString().substr(0,10));
-    }, [toggleEditModal]);
-  
+    
   
     
   
-    const  editSale=() => {
-      axios.put(`/Sales/PutSales/${id}`,{
-        id:id,
+    const  editSale=(currid) => {
+      axios.put(`/Sales/PutSales/${currid}`,{
+        id:currid,
         productId: productId,
         customerId: customerId,
         storeId: storeId,
@@ -32,6 +26,11 @@ const EditSale= (props) =>{
         .then((res) => {
           toggle();
             refreshSale();
+            setCustomerId(currentCustomerId);
+      setProductId( currentProductId);
+      setStoreId(currentStoreId);
+      setDateSold(currentDate);
+            
             
         })
         .catch((err) => {
@@ -54,7 +53,7 @@ const EditSale= (props) =>{
             label="Date sold"
             control="input"
             type="date"
-            value={dateSold}
+            value={currentDate}
             onChange={(e) => setDateSold(e.target.value)}
             required
           />
@@ -94,7 +93,7 @@ const EditSale= (props) =>{
           <Form.Field
             label="Store"
             control="select"
-            value={currentProductId}
+            value={currentStoreId}
             onChange={(e) => setStoreId(e.target.value)}
             required
           >
@@ -119,7 +118,7 @@ const EditSale= (props) =>{
           labelPosition="right"
           icon="check"
           onClick={() => {
-            editSale(id);
+            editSale(currid);
           }}
         />
       </Modal.Actions>
