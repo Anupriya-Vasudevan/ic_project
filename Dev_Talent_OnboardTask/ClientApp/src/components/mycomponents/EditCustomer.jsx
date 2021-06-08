@@ -1,30 +1,42 @@
-import React, { useState, Fragment} from 'react';
+import React, { useState, Fragment,useEffect} from 'react';
 import { Button,  Form, Modal } from 'semantic-ui-react'
 import axios from 'axios';
 
 const EditCustomer = (props) =>{
-    const {open,toggle,refreshCustomers,id,currentName,currentAddress} =props;
-    //const {name,address} =customer;
+    const {open,toggle,id,currentName,currentAddress,refreshCustomers} =props;
+   
     const [cname, setName] = useState(currentName);
   const [caddress, setAddress] = useState(currentAddress);
-    const  editCustomer=(id) => {
+  
+  useEffect(() => {
+    setName(currentName);
+    setAddress(currentAddress);
+ }, [open]);
+
+    const  editCustomer=()=> {
+      
       axios.put(`/Customers/PutCustomer/${id}`,{
       
         id: id,
         name: cname,
-        address: caddress,
+        address:caddress,
     })
         .then((res) => {
             refreshCustomers();
             toggle();
-            setName(currentName);
-            setAddress(currentAddress);
+            
+            
         })
         .catch((err) => {
             console.log(err)
         });
 };
-        
+ 
+
+    
+ 
+
+
       return (
         <Fragment>
         <Modal  open={open}>
@@ -32,14 +44,14 @@ const EditCustomer = (props) =>{
               <Modal.Content >
                 
                 <Modal.Description>
-                <Form>
+                <Form >
             <Form.Field>
               <label> Name</label>
-              <input placeholder='Please Enter Customer Name' defaultValue={currentName}  onChange={(e) => setName(e.target.value)} />
+              <input placeholder='Please Enter Customer Name' value={cname}  onChange={(e) => setName(e.target.value)}/>
             </Form.Field>
             <Form.Field>
               <label>Address</label>
-              <input placeholder='Please Enter Customer Address' defaultValue={currentAddress} onChange={(e)=>setAddress(e.target.value)}/>
+              <input placeholder='Please Enter Customer Address' value={caddress} onChange={(e)=>setAddress(e.target.value)}/>
             </Form.Field>
            
             
@@ -50,7 +62,7 @@ const EditCustomer = (props) =>{
               <Button color='black' onClick={toggle}>
                 Cancel
                 </Button>
-                <Button color='green' onClick={() =>editCustomer(id)}  >
+                <Button color='green' onClick={()=>editCustomer()}  >
              Edit
                 </Button>
               </Modal.Actions>

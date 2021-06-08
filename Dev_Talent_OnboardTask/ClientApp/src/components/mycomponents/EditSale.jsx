@@ -1,4 +1,4 @@
-import React, { useState} from 'react';
+import React, { useState,useEffect} from 'react';
 import { Button,  Form, Modal } from 'semantic-ui-react'
 import axios from 'axios';
 
@@ -6,12 +6,19 @@ import axios from 'axios';
 const EditSale= (props) =>{
     const {open,toggle,currid,currentCustomerId,currentProductId,currentStoreId,currentDate,customers, products, stores,
     refreshSale} =props;
-    const [productId, setProductId] = useState(currentProductId);
-    const [customerId, setCustomerId] = useState(currentCustomerId);
-    const [storeId, setStoreId] = useState(currentStoreId);
-    const [dateSold, setDateSold] = useState(currentDate);
+    //console.log(currentDate);
+    const [productId, setProductId] = useState(0);
+    const [customerId, setCustomerId] = useState(0);
+    const [storeId, setStoreId] = useState(0);
+    const [dateSold, setDateSold] = useState(0);
+   
     
-    
+    useEffect(() => {
+      setProductId(currentProductId);
+      setCustomerId(currentCustomerId);
+      setStoreId(currentStoreId);
+      setDateSold(new Date(currentDate).toString());
+    }, [open]);
   
     
   
@@ -26,10 +33,7 @@ const EditSale= (props) =>{
         .then((res) => {
           toggle();
             refreshSale();
-            setCustomerId(currentCustomerId);
-      setProductId( currentProductId);
-      setStoreId(currentStoreId);
-      setDateSold(currentDate);
+            
             
             
         })
@@ -53,31 +57,24 @@ const EditSale= (props) =>{
             label="Date sold"
             control="input"
             type="date"
-            value={currentDate}
+            
+            
+            value={dateSold}
             onChange={(e) => setDateSold(e.target.value)}
             required
           />
 
-          <Form.Field
-            label="Customer"
-            control="select"
-            value={currentCustomerId}
-            onChange={(e) => setCustomerId(e.target.value)}
-            required
-          >
-            <option key="0" value="">
-              -select customer-
-            </option>
+          <Form.Field label="Customer" control="select" value={customerId}  onChange={(e) => setCustomerId(e.target.value)} required>
+          <option key="0" value="">-select customer-</option>
             {customers.map((c) => (
-              <option key={c.id} value={c.id} >
-                {c.name}
-              </option>
+              <option key={c.id} value={c.id}>{c.name}</option>
             ))}
+         
           </Form.Field>
           <Form.Field
             label="Product"
             control="select"
-            value={currentProductId}
+            value={productId}
             onChange={(e) => setProductId(e.target.value)}
             required
           >
@@ -93,7 +90,7 @@ const EditSale= (props) =>{
           <Form.Field
             label="Store"
             control="select"
-            value={currentStoreId}
+            value={storeId}
             onChange={(e) => setStoreId(e.target.value)}
             required
           >

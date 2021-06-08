@@ -4,6 +4,7 @@ import axios from 'axios';
 import EditSale from './EditSale';
 import DeleteSale from './DeleteSale'
 import CreateSale from './CreateSale'
+import Moment from 'react-moment';
 
 
 
@@ -19,7 +20,7 @@ export class Sales extends Component {
       currentCustomerId:0,
       currentProductId:0,
       currentStoreId:0,
-      currentDate:null,
+      CurrentDate:null,
     toggleEditModal: false ,
     toggleDeleteModal:false,
     currentpage: 1,
@@ -118,8 +119,7 @@ export class Sales extends Component {
           customers={customers} products={products} stores={stores}/>
           <Button primary onClick={()=>this.setState({toggleCreateModal: true })}>New Sale </Button>
 <EditSale  open={ toggleEditModal}  toggle={this.toggle} currid={currid} currentCustomerId={currentCustomerId}  
-currentProductId={currentProductId} currentStoreId={currentStoreId} 
-currentDate={currentDate}  customers={customers} products={products} stores={stores} refreshSale={()=>this.getSales()} />
+currentProductId={currentProductId} currentStoreId={currentStoreId} currentDate={currentDate}  customers={customers} products={products} stores={stores} refreshSale={()=>this.getSales()} />
 <DeleteSale open={toggleDeleteModal} toggleDelete={this.toggleDelete} id={id} refreshSale={()=>this.getSales()}/>
   <Table celled>
     <Table.Header>
@@ -141,14 +141,14 @@ currentDate={currentDate}  customers={customers} products={products} stores={sto
        <Table.Cell>{s.customer.name}</Table.Cell>
        <Table.Cell>{s.product.name}</Table.Cell>
        <Table.Cell>{s.store.name}</Table.Cell>
-       <Table.Cell >{s.dateSold},</Table.Cell>
+       <Table.Cell ><Moment format="D MMM, YYYY">{s.dateSold}</Moment></Table.Cell>
        <Table.Cell><Button color='yellow' icon labelPosition='left' onClick={()=>this.setState(
          {toggleEditModal: true,
           currid:s.id,
          currentCustomerId:s.customer.id,
          currentProductId:s.product.id,
          currentStoreId:s.store.id,
-         currentDate:s.date,
+         currentDate:s.dateSold,
          })}>
                     <Icon name='edit'/>
                   Edit</Button></Table.Cell>

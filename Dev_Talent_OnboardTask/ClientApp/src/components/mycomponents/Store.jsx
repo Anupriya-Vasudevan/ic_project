@@ -53,7 +53,7 @@ export class Store extends Component {
   
   
     render(){
-      const { stores,toggleEditModal,currentAddress,currentName,id,toggleDeleteModal,toggleCreateModal,postsPerPage}=this.state;
+      const { stores,toggleEditModal,id,currentAddress,currentName,toggleDeleteModal,toggleCreateModal,postsPerPage}=this.state;
       const indexOfLastPost = this.state.currentpage * this.state.postsPerPage;
         const indexOfFirstPost = indexOfLastPost - postsPerPage;
         const currentstores = stores.slice(indexOfFirstPost, indexOfLastPost);
@@ -66,7 +66,7 @@ export class Store extends Component {
      return (
 <div>
 <CreateStore  open={toggleCreateModal} toggleModal={this.toggleModal} refreshStore={()=>this.getStore()}/>
-<EditStore  open={ toggleEditModal}  toggle={this.toggle} currentName={currentName} currentAddress={currentAddress} id={id} refreshStore={()=>this.getStore()}/>
+<EditStore  open={ toggleEditModal}  toggle={this.toggle} id={id} currentName={currentName} currentAddress={currentAddress}  refreshStore={()=>this.getStore()}/>
 <DeleteStore open={toggleDeleteModal} toggleDelete={this.toggleDelete} id={id} refreshStore={()=>this.getStore()}/>
 <Button primary onClick={()=>this.setState({toggleCreateModal: true })}>New Store</Button>
   <Table celled>
@@ -86,9 +86,10 @@ export class Store extends Component {
        <Table.Cell>{s.address}</Table.Cell>
        <Table.Cell><Button color='yellow' icon labelPosition='left' onClick={()=>this.setState(
          {toggleEditModal: true,
+          id:s.id,
          currentName:s.name,
-         currentAddress:s.address,
-         id:s.id})}>
+         currentAddress:s.address
+         })}>
                     <Icon name='edit'/>
                   Edit</Button></Table.Cell>
        

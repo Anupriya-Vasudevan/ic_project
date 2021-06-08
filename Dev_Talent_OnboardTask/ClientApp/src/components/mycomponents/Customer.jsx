@@ -53,7 +53,7 @@ export class Customer extends Component{
           
     render()
     {
-      const { customers,toggleEditModal,currentAddress,currentName,id,toggleDeleteModal,toggleCreateModal, postsPerPage}=this.state;
+      const { customers,toggleEditModal,id,currentName,currentAddress,toggleDeleteModal,toggleCreateModal, postsPerPage}=this.state;
       const indexOfLastPost = this.state.currentpage * this.state.postsPerPage;
         const indexOfFirstPost = indexOfLastPost - postsPerPage;
         const currentPosts = customers.slice(indexOfFirstPost, indexOfLastPost);
@@ -67,7 +67,7 @@ export class Customer extends Component{
 <div>
     
 <CreateCustomer  open={toggleCreateModal} toggleModal={this.toggleModal} refreshCustomers={()=>this.getData()}/> 
-<EditCustomer  open={ toggleEditModal}  toggle={this.toggle} currentName={currentName} currentAddress={currentAddress} id={id} refreshCustomers={()=>this.getData()}/>
+<EditCustomer  open={ toggleEditModal}  toggle={this.toggle} id={id} currentName={currentName} currentAddress={currentAddress}  refreshCustomers={()=>this.getData()}/>
 <DeleteCustomer open={toggleDeleteModal} toggleDelete={this.toggleDelete} id={id} refreshCustomers={()=>this.getData()}/>
 <Button primary onClick={()=>this.setState({toggleCreateModal: true })}>New Customer</Button>
   <Table celled>
@@ -87,9 +87,10 @@ export class Customer extends Component{
        <Table.Cell>{c.address}</Table.Cell>
        <Table.Cell><Button color='yellow' icon labelPosition='left' onClick={()=>this.setState(
          {toggleEditModal: true,
+          id:c.id,
          currentName:c.name,
-         currentAddress:c.address,
-         id:c.id})}>
+         currentAddress:c.address
+       })}>
                     <Icon name='edit'/>
                   Edit</Button></Table.Cell>
        

@@ -54,7 +54,7 @@ export class Product extends Component {
   
   
     render(){
-      const { products,toggleEditModal,currentPrice,currentName,id,toggleDeleteModal,toggleCreateModal,postsPerPage}=this.state;
+      const { products,toggleEditModal,id,currentName,currentPrice,toggleDeleteModal,toggleCreateModal,postsPerPage}=this.state;
       const indexOfLastPost = this.state.currentpage * this.state.postsPerPage;
         const indexOfFirstPost = indexOfLastPost - postsPerPage;
         const currentProducts = products.slice(indexOfFirstPost, indexOfLastPost);
@@ -68,7 +68,7 @@ export class Product extends Component {
 <div>
   
 <CreateProduct  open={toggleCreateModal} toggleModal={this.toggleModal} refreshProducts={()=>this.getProduct()}/>
-<EditProduct open={ toggleEditModal}  toggle={this.toggle} currentName={currentName} currentPrice={currentPrice} id={id} refreshProducts={()=>this.getProduct()}/>
+<EditProduct open={ toggleEditModal}  toggle={this.toggle} id={id} currentName={currentName} currentPrice={currentPrice}  refreshProducts={()=>this.getProduct()}/>
 <DeleteProduct open={toggleDeleteModal} toggleDelete={this.toggleDelete} id={id} refreshProducts={()=>this.getProduct()}/>
 <Button primary onClick={()=>this.setState({toggleCreateModal: true })}>New Product</Button>
   <Table celled>

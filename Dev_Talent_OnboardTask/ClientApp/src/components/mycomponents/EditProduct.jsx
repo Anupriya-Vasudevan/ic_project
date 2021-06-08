@@ -1,12 +1,17 @@
-import React, { useState, Fragment} from 'react';
+import React, { useState, Fragment,useEffect} from 'react';
 import { Button,  Form, Modal } from 'semantic-ui-react'
 import axios from 'axios';
 
 const EditProduct = (props) =>{
-    const {open,toggle,refreshProducts,id,currentName,currentPrice} =props;
+    const {open,toggle,id,currentName,currentPrice,refreshProducts} =props;
     const [cname, setName] = useState(currentName);
     const [cprice, setPrice] = useState(currentPrice);
-    const  editProduct=(id) => {
+    useEffect(() => {
+      setName(currentName);
+      setPrice(currentPrice);
+    }, [open]);
+  
+    const  editProduct=() => {
       axios.put(`/Products/PutProduct/${id}`,{
       
         id: id,
@@ -16,8 +21,7 @@ const EditProduct = (props) =>{
         .then((res) => {
             toggle();
             refreshProducts();
-            setName(currentName);
-            setPrice(currentPrice);
+           
         })
         .catch((err) => {
             console.log(err)
@@ -34,11 +38,11 @@ const EditProduct = (props) =>{
                 <Form>
             <Form.Field>
               <label> Name</label>
-              <input  defaultValue={currentName}  onChange={(e) => setName(e.target.value)} />
+              <input  value={cname}  onChange={(e) => setName(e.target.value)} />
             </Form.Field>
             <Form.Field>
               <label>Price</label>
-              <input  defaultValue={currentPrice} onChange={(e)=>setPrice(e.target.value)}/>
+              <input  value={cprice} onChange={(e)=>setPrice(e.target.value)}/>
             </Form.Field>
            
             
@@ -49,7 +53,7 @@ const EditProduct = (props) =>{
               <Button color='black' onClick={toggle}>
                 Cancel
                 </Button>
-                <Button color='green' onClick={() =>editProduct(id)}  >
+                <Button color='green' onClick={() =>editProduct()}  >
              Edit
                 </Button>
               </Modal.Actions>

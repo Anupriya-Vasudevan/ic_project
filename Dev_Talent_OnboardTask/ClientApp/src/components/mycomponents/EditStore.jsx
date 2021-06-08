@@ -1,12 +1,16 @@
-import React, { useState, Fragment} from 'react';
+import React, { useState, Fragment,useEffect} from 'react';
 import { Button,  Form, Modal } from 'semantic-ui-react'
 import axios from 'axios';
 
 const EditStore = (props) =>{
-    const {open,toggle,refreshStore,id,currentName,currentAddress} =props;
+    const {open,toggle,id,currentName,currentAddress,refreshStore} =props;
     //const {name,address} =customer;
     const [cname, setName] = useState(currentName);
   const [caddress, setAddress] = useState(currentAddress);
+  useEffect(() => {
+    setName(currentName);
+    setAddress(currentAddress);
+  }, [open]);
     const  editStore=(id) => {
       axios.put(`/Stores/PutStore/${id}`,{
       
@@ -17,8 +21,7 @@ const EditStore = (props) =>{
         .then((res) => {
             toggle();
             refreshStore();
-            setName(currentName);
-            setAddress(currentAddress);
+           
         })
         .catch((err) => {
             console.log(err)
@@ -35,11 +38,11 @@ const EditStore = (props) =>{
                 <Form>
             <Form.Field>
               <label> Name</label>
-              <input  defaultValue={currentName}  onChange={(e) => setName(e.target.value)} />
+              <input  value={cname}  onChange={(e) => setName(e.target.value)} />
             </Form.Field>
             <Form.Field>
               <label>Address</label>
-              <input  defaultValue={currentAddress} onChange={(e)=>setAddress(e.target.value)}/>
+              <input  value={caddress} onChange={(e)=>setAddress(e.target.value)}/>
             </Form.Field>
            
             
