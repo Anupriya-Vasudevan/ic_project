@@ -7,7 +7,7 @@ const DeleteCustomer = (props) =>{
    const deleteRecord = (id) => {
         axios.delete(`/Customers/DeleteCustomer/${id}`)
         .then((res) => {
-            console.log(res);
+            //console.log(res);
             toggleDelete();
            refreshCustomers();  
           })

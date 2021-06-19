@@ -7,12 +7,10 @@ const DeleteStore = (props) =>{
    const deleteRecord = (id) => {
         axios.delete(`/Stores/DeleteStore/${id}`)
         .then((res) => {
-            console.log(res);
+            //console.log(res);
             toggleDelete();
-           refreshStore();
-           
-            
-      })
+           refreshStore();   
+        })
       .catch( (err) => {
        console.log(err);
       });

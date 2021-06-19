@@ -1,7 +1,7 @@
 import React, { useState,useEffect} from 'react';
 import { Button,  Form, Modal } from 'semantic-ui-react'
 import axios from 'axios';
-
+import moment from 'moment';
 
 const EditSale= (props) =>{
     const {open,toggle,currid,currentCustomerId,currentProductId,currentStoreId,currentDate,customers, products, stores,
@@ -17,11 +17,9 @@ const EditSale= (props) =>{
       setProductId(currentProductId);
       setCustomerId(currentCustomerId);
       setStoreId(currentStoreId);
-      setDateSold(new Date(currentDate).toString());
+      setDateSold(new Date(currentDate).toDateString());
     }, [open]);
-  
-    
-  
+
     const  editSale=(currid) => {
       axios.put(`/Sales/PutSales/${currid}`,{
         id:currid,
@@ -33,21 +31,15 @@ const EditSale= (props) =>{
         .then((res) => {
           toggle();
             refreshSale();
-            
-            
-            
-        })
+      })
         .catch((err) => {
             console.log(err)
         });
 };
-        
-      return (
-       
-       <Modal
+return (
+      <Modal
       size="mini"
       dimmer="blurring"
-      
       open={open}
     >
       <Modal.Header>Edit Sale</Modal.Header>
@@ -57,9 +49,8 @@ const EditSale= (props) =>{
             label="Date sold"
             control="input"
             type="date"
-            
-            
-            value={dateSold}
+            value={moment(dateSold).format("YYYY-MM-DD")}
+            //value={currentDate}
             onChange={(e) => setDateSold(e.target.value)}
             required
           />

@@ -17,7 +17,7 @@ const  createSale=() => {
     dateSold: dateSold,
   })
 .then((res) => {
-     console.log(res);
+     //console.log(res);
      toggleModal();
      refreshSale();
     })

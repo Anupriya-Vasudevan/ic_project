@@ -34,7 +34,7 @@ export class Customer extends Component{
         .then(({data}) => {
             this.setState({customers: data,       
             });
-        console.log({data});
+        //console.log({data});
           })
       .catch( (err) => {
        console.log(err);

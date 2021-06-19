@@ -13,7 +13,6 @@ const EditProduct = (props) =>{
   
     const  editProduct=() => {
       axios.put(`/Products/PutProduct/${id}`,{
-      
         id: id,
         name: cname,
         price: cprice,
@@ -33,8 +32,7 @@ const EditProduct = (props) =>{
         <Modal  open={open}>
               <Modal.Header>Edit Product</Modal.Header>
               <Modal.Content >
-                
-                <Modal.Description>
+              <Modal.Description>
                 <Form>
             <Form.Field>
               <label> Name</label>
@@ -43,9 +41,7 @@ const EditProduct = (props) =>{
             <Form.Field>
               <label>Price</label>
               <input  value={cprice} onChange={(e)=>setPrice(e.target.value)}/>
-            </Form.Field>
-           
-            
+            </Form.Field>           
           </Form>
           </Modal.Description>
               </Modal.Content>

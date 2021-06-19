@@ -22,10 +22,10 @@ export class Store extends Component {
       };
   }
 
-    componentDidMount(){
-     
-          this.getStore();
-          }
+    componentDidMount()
+    {
+     this.getStore();
+    }
          
       getStore()
       { 
@@ -34,7 +34,7 @@ export class Store extends Component {
             this.setState({stores:data,
               
             });
-        console.log({data});
+       //console.log({data});
         
       })
       .catch( (err) => {

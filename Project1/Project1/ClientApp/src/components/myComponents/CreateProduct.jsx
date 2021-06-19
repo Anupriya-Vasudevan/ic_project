@@ -13,13 +13,10 @@ const  createProduct=() => {
     
   })
 .then((res) => {
-    // this.getData();
-     console.log(res);
+    //console.log(res);
      toggleModal();
      refreshProducts();
-    
-    
-})
+    })
 
 .catch( (err) => {
 console.log(err);
@@ -40,8 +37,6 @@ return (
     <label>Price</label>$
     <input placeholder='Enter the Price' onChange={(e)=>setPrice(e.target.value)}/>
   </Form.Field>
- 
-  
 </Form>
 </Modal.Description>
     </Modal.Content>

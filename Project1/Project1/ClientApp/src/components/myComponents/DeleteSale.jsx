@@ -8,11 +8,9 @@ const DeleteSale = (props) =>{
    const deleteRecord = (id) => {
         axios.delete(`/Sales/DeleteSales/${id}`)
         .then((res) => {
-            console.log(res);
+            //console.log(res);
             toggleDelete();
-           refreshSale();
-           
-            
+           refreshSale();   
       })
       .catch( (err) => {
        console.log(err);

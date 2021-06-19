@@ -13,8 +13,7 @@ const  createCustomer=() => {
       
     })
 .then((res) => {
-      // this.getData();
-       console.log(res);
+         //console.log(res);
        toggleModal();
        refreshCustomers();
       

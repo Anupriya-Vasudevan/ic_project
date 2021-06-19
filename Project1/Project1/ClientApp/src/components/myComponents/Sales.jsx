@@ -43,7 +43,7 @@ export class Sales extends Component {
            .then(({data}) => {
             this.setState({sales:data
             });
-        console.log({data});
+        //console.log({data});
         
       })
       .catch( (err) => {
@@ -56,9 +56,8 @@ export class Sales extends Component {
        .then(({data}) => {
         this.setState({products:data,
         });
-    console.log({data});
-    
-  })
+   // console.log({data});
+      })
   .catch( (err) => {
    console.log(err);
   });
@@ -69,7 +68,7 @@ export class Sales extends Component {
            .then(({data}) => {
             this.setState({stores:data,
             });
-        console.log({data});
+        //console.log({data});
         
       })
       .catch( (err) => {
@@ -84,7 +83,7 @@ export class Sales extends Component {
             this.setState({customers:data
               
             });
-        console.log({data});
+       //console.log({data});
         
       })
       .catch( (err) => {
@@ -141,6 +140,7 @@ currentProductId={currentProductId} currentStoreId={currentStoreId} currentDate=
        <Table.Cell>{s.customer.name}</Table.Cell>
        <Table.Cell>{s.product.name}</Table.Cell>
        <Table.Cell>{s.store.name}</Table.Cell>
+       
        <Table.Cell ><Moment format="D MMM, YYYY">{s.dateSold}</Moment></Table.Cell>
        <Table.Cell><Button color='yellow' icon labelPosition='left' onClick={()=>this.setState(
          {toggleEditModal: true,

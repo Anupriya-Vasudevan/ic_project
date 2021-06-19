@@ -13,14 +13,10 @@ const  createStore=() => {
     
   })
 .then((res) => {
-    // this.getData();
-     console.log(res);
+     //console.log(res);
      toggleModal();
-     refreshStore();
-    
-    
-})
-
+     refreshStore();  
+    })
 .catch( (err) => {
 console.log(err);
 });

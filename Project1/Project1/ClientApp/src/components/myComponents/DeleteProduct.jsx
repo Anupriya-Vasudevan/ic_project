@@ -7,10 +7,9 @@ const DeleteProduct = (props) =>{
    const deleteRecord = (id) => {
         axios.delete(`/Products/DeleteProduct/${id}`)
         .then((res) => {
-            console.log(res);
+            //console.log(res);
             toggleDelete();
-           refreshProducts();
-             
+           refreshProducts();   
       })
       .catch( (err) => {
        console.log(err);

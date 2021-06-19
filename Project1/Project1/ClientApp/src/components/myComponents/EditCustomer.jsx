@@ -3,9 +3,8 @@ import { Button,  Form, Modal } from 'semantic-ui-react'
 import axios from 'axios';
 
 const EditCustomer = (props) =>{
-    const {open,toggle,id,currentName,currentAddress,refreshCustomers} =props;
-   
-    const [cname, setName] = useState(currentName);
+  const {open,toggle,id,currentName,currentAddress,refreshCustomers} =props;
+  const [cname, setName] = useState(currentName);
   const [caddress, setAddress] = useState(currentAddress);
   
   useEffect(() => {
@@ -32,17 +31,11 @@ const EditCustomer = (props) =>{
         });
 };
  
-
-    
- 
-
-
-      return (
+return (
         <Fragment>
         <Modal  open={open}>
               <Modal.Header>Edit Customer</Modal.Header>
-              <Modal.Content >
-                
+              <Modal.Content >          
                 <Modal.Description>
                 <Form >
             <Form.Field>
@@ -52,9 +45,7 @@ const EditCustomer = (props) =>{
             <Form.Field>
               <label>Address</label>
               <input placeholder='Please Enter Customer Address' value={caddress} onChange={(e)=>setAddress(e.target.value)}/>
-            </Form.Field>
-           
-            
+            </Form.Field>          
           </Form>
           </Modal.Description>
               </Modal.Content>
