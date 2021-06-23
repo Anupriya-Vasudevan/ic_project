@@ -23,11 +23,14 @@ export class Sales extends Component {
       CurrentDate:null,
     toggleEditModal: false ,
     toggleDeleteModal:false,
-    currentpage: 1,
-    postsPerPage:3,
     toggleCreateModal: false ,
-    
-      };
+    togglesortnamedesc: false,
+    togglesortproddesc: false,
+    togglesortstoredesc: false,
+    togglesortdatedesc: false,
+    currentpage: 1,
+    postsPerPage:3
+     };
   }
 
     componentDidMount(){
@@ -99,7 +102,52 @@ export class Sales extends Component {
   toggleModal = () => {
     this.setState({toggleCreateModal:!this.state.toggleCreateModal})
 };
-  
+
+sortByName = () => {
+  if (this.state.togglesortnamedesc === false) {
+      this.setState({ sales: this.state.sales.sort((a, b) => a.customer.name < b.customer.name ? 1 : -1) })
+      this.setState({ togglesortnamedesc: !this.state.togglesortnamedesc })
+  }
+  else {
+      this.setState({ sales: this.state.sales.sort((a, b) => a.customer.name > b.customer.name ? 1 : -1) })
+      this.setState({ togglesortnamedesc: !this.state.togglesortnamedesc })
+
+  }
+}
+sortByProduct = () => {
+  if (this.state.togglesortproddesc === false) {
+      this.setState({ sales: this.state.sales.sort((a, b) => a.product.name < b.product.name ? 1 : -1) })
+      this.setState({ togglesortproddesc: !this.state.togglesortproddesc })
+  }
+  else {
+      this.setState({ sales: this.state.sales.sort((a, b) => a.product.name > b.product.name ? 1 : -1) })
+      this.setState({ togglesortproddesc: !this.state.togglesortproddesc })
+
+  }
+}
+sortByStore = () => {
+  if (this.state.togglesortstoredesc == false) {
+      this.setState({ sales: this.state.sales.sort((a, b) => a.store.name < b.store.name ? 1 : -1) })
+      this.setState({ togglesortstoredesc: !this.state.togglesortstoredesc })
+  }
+  else {
+      this.setState({ sales: this.state.sales.sort((a, b) => a.store.name > b.store.name ? 1 : -1) })
+      this.setState({ togglesortstoredesc: !this.state.togglesortstoredesc })
+
+  }
+}
+
+sortByDate = () => {
+  if (this.state.togglesortdatedesc === false) {
+      this.setState({ sales: this.state.sales.sort((a, b) => new Date(a.dateSold) < new Date(b.dateSold) ? 1 : -1) })
+      this.setState({ togglesortdatedesc: !this.state.togglesortdatedesc })
+  }
+  else {
+      this.setState({ sales: this.state.sales.sort((a, b) => new Date(a.dateSold) > new Date(b.dateSold) ? 1 : -1) })
+      this.setState({ togglesortdatedesc: !this.state.togglesortdatedesc })
+
+  }
+}
     render(){
       const { currid,currentCustomerId,currentProductId,currentStoreId,currentDate, customers,products,stores,sales,toggleEditModal,id,toggleDeleteModal,postsPerPage,toggleCreateModal}=this.state;
       const indexOfLastPost = this.state.currentpage * this.state.postsPerPage;
@@ -123,10 +171,10 @@ currentProductId={currentProductId} currentStoreId={currentStoreId} currentDate=
   <Table celled>
     <Table.Header>
       <Table.Row>
-        <Table.HeaderCell>Customer</Table.HeaderCell>
-        <Table.HeaderCell>Product</Table.HeaderCell>
-        <Table.HeaderCell>Store</Table.HeaderCell>
-        <Table.HeaderCell>DateSold</Table.HeaderCell>
+      <Table.HeaderCell>Customer<Icon onClick={this.sortByName} name="sort" /></Table.HeaderCell>
+      <Table.HeaderCell>Product<Icon onClick={this.sortByProduct} name="sort" /></Table.HeaderCell>
+      <Table.HeaderCell>Store<Icon onClick={this.sortByStore} name="sort" /></Table.HeaderCell>
+      <Table.HeaderCell>Date Sold<Icon onClick={this.sortByDate} name="sort" /></Table.HeaderCell>
         <Table.HeaderCell>Actions</Table.HeaderCell>
         <Table.HeaderCell>Actions</Table.HeaderCell>
       </Table.Row>

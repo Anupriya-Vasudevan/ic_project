@@ -50,6 +50,7 @@ return (
             control="input"
             type="date"
             value={moment(dateSold).format("YYYY-MM-DD")}
+            
             //value={currentDate}
             onChange={(e) => setDateSold(e.target.value)}
             required

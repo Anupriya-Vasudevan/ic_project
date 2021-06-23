@@ -17,10 +17,11 @@ export class Product extends Component {
     toggleCreateModal: false ,
     toggleEditModal: false ,
     toggleDeleteModal:false,
+    togglesortnamedesc: false,
+    togglesortpricedesc: false,
     currentpage: 1,
     postsPerPage:3
-    
-      };
+        };
   }
 
     componentDidMount(){
@@ -51,6 +52,28 @@ export class Product extends Component {
     toggle = () => {
       this.setState({toggleEditModal:!this.state.toggleEditModal})
   };
+  sortByName = () => {
+    if (this.state.togglesortnamedesc === false) {
+        this.setState({ products: this.state.products.sort((a, b) => a.name < b.name ? 1 : -1) })
+        this.setState({ togglesortnamedesc: !this.state.togglesortnamedesc })
+    }
+    else {
+        this.setState({ products: this.state.products.sort((a, b) => a.name > b.name ? 1 : -1) })
+        this.setState({ togglesortnamedesc: !this.state.togglesortnamedesc })
+
+    }
+}
+sortByPrice = () => {
+    if (this.state.togglesortpricedesc === false) {
+        this.setState({ products: this.state.products.sort((a, b) => a.price< b.price ? 1 : -1) })
+        this.setState({ togglesortpricedesc: !this.state.togglesortpricedesc })
+    }
+    else {
+        this.setState({ products: this.state.products.sort((a, b) => a.price > b.price ? 1 : -1) })
+        this.setState({ togglesortaddrdesc: !this.state.togglesortaddrdesc })
+
+    }
+  }
   
   
     render(){
@@ -74,8 +97,8 @@ export class Product extends Component {
   <Table celled>
     <Table.Header>
       <Table.Row>
-        <Table.HeaderCell>Name</Table.HeaderCell>
-        <Table.HeaderCell>Price</Table.HeaderCell>
+        <Table.HeaderCell>Name<Icon onClick={this.sortByName} name="sort" /></Table.HeaderCell>
+                            <Table.HeaderCell>Price<Icon onClick={this.sortByPrice} name="sort" /></Table.HeaderCell>
         <Table.HeaderCell>Actions</Table.HeaderCell>
         <Table.HeaderCell>Actions</Table.HeaderCell>
       </Table.Row>

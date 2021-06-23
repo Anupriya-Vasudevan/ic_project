@@ -5,6 +5,7 @@ import DeleteCustomer from './DeleteCustomer';
 import axios from 'axios';
 import CreateCustomer from './CreateCustomer';
 
+
 export class Customer extends Component{
    constructor(props) {
     super(props);
@@ -15,10 +16,13 @@ export class Customer extends Component{
     toggleCreateModal:false,
     toggleEditModal: false ,
     toggleDeleteModal:false,
+    togglesortnamedesc: false,
+    togglesortaddrdesc: false,
     currentpage: 1,
-    postsPerPage:3
+    postsPerPage:3,
+    
     };
-      
+          
   }
 
     componentDidMount()
@@ -50,7 +54,31 @@ export class Customer extends Component{
   toggleModal = () => {
     this.setState({toggleCreateModal:!this.state.toggleCreateModal})
 };
-          
+
+sortByName = () => {
+  if (this.state.togglesortnamedesc === false) {
+      this.setState({ customers: this.state.customers.sort((a, b) => a.name < b.name ? 1 : -1) })
+      this.setState({ togglesortnamedesc: !this.state.togglesortnamedesc })
+  }
+  else {
+      this.setState({ customers: this.state.customers.sort((a, b) => a.name > b.name ? 1 : -1) })
+      this.setState({ togglesortnamedesc: !this.state.togglesortnamedesc })
+
+  }
+}
+sortByAddress = () => {
+  if (this.state.togglesortaddrdesc === false) {
+      this.setState({ customers: this.state.customers.sort((a, b) => a.address < b.address ? 1 : -1) })
+      this.setState({ togglesortaddrdesc: !this.state.togglesortaddrdesc })
+  }
+  else {
+      this.setState({ customers: this.state.customers.sort((a, b) => a.address > b.address ? 1 : -1) })
+      this.setState({ togglesortaddrdesc: !this.state.togglesortaddrdesc })
+
+  }
+}
+
+
     render()
     {
       const { customers,toggleEditModal,id,currentName,currentAddress,toggleDeleteModal,toggleCreateModal, postsPerPage}=this.state;
@@ -65,21 +93,19 @@ export class Customer extends Component{
         ]      
      return (
 <div>
-    
 <CreateCustomer  open={toggleCreateModal} toggleModal={this.toggleModal} refreshCustomers={()=>this.getData()}/> 
 <EditCustomer  open={ toggleEditModal}  toggle={this.toggle} id={id} currentName={currentName} currentAddress={currentAddress}  refreshCustomers={()=>this.getData()}/>
 <DeleteCustomer open={toggleDeleteModal} toggleDelete={this.toggleDelete} id={id} refreshCustomers={()=>this.getData()}/>
 <Button primary onClick={()=>this.setState({toggleCreateModal: true })}>New Customer</Button>
-  <Table celled>
+  <Table  sortable celled>
     <Table.Header>
       <Table.Row>
-        <Table.HeaderCell>Name</Table.HeaderCell>
-        <Table.HeaderCell>Address</Table.HeaderCell>
+        <Table.HeaderCell>Name<Icon onClick={this.sortByName} name="sort" /></Table.HeaderCell>
+        <Table.HeaderCell>Address<Icon onClick={this.sortByAddress} name="sort" /></Table.HeaderCell>
         <Table.HeaderCell>Actions</Table.HeaderCell>
         <Table.HeaderCell>Actions</Table.HeaderCell>
       </Table.Row>
     </Table.Header>
-
     <Table.Body>
       {currentPosts.map((c)=>(
                  <Table.Row key={c.id}>

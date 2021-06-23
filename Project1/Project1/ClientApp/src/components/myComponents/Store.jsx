@@ -17,6 +17,8 @@ export class Store extends Component {
     toggleCreateModal: false ,
     toggleEditModal: false ,
     toggleDeleteModal:false,
+    togglesortnamedesc: false,
+    togglesortaddrdesc: false,
     currentpage: 1,
     postsPerPage:3
       };
@@ -50,7 +52,28 @@ export class Store extends Component {
     toggle = () => {
       this.setState({toggleEditModal:!this.state.toggleEditModal})
   };
+  sortByName = () => {
+    if (this.state.togglesortnamedesc === false) {
+        this.setState({ stores: this.state.stores.sort((a, b) => a.name < b.name ? 1 : -1) })
+        this.setState({ togglesortnamedesc: !this.state.togglesortnamedesc })
+    }
+    else {
+        this.setState({stores: this.state.stores.sort((a, b) => a.name > b.name ? 1 : -1) })
+        this.setState({ togglesortnamedesc: !this.state.togglesortnamedesc })
   
+    }
+  }
+  sortByAddress = () => {
+    if (this.state.togglesortaddrdesc === false) {
+        this.setState({ stores: this.state.stores.sort((a, b) => a.address < b.address ? 1 : -1) })
+        this.setState({ togglesortaddrdesc: !this.state.togglesortaddrdesc })
+    }
+    else {
+        this.setState({ stores: this.state.stores.sort((a, b) => a.address > b.address ? 1 : -1) })
+        this.setState({ togglesortaddrdesc: !this.state.togglesortaddrdesc })
+  
+    }
+  }
   
     render(){
       const { stores,toggleEditModal,id,currentAddress,currentName,toggleDeleteModal,toggleCreateModal,postsPerPage}=this.state;
@@ -72,8 +95,8 @@ export class Store extends Component {
   <Table celled>
     <Table.Header>
       <Table.Row>
-        <Table.HeaderCell>Name</Table.HeaderCell>
-        <Table.HeaderCell>Address</Table.HeaderCell>
+      <Table.HeaderCell>Name<Icon onClick={this.sortByName} name="sort" /></Table.HeaderCell>
+        <Table.HeaderCell>Address<Icon onClick={this.sortByAddress} name="sort" /></Table.HeaderCell>
         <Table.HeaderCell>Actions</Table.HeaderCell>
         <Table.HeaderCell>Actions</Table.HeaderCell>
       </Table.Row>
